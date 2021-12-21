@@ -1,6 +1,6 @@
 ## Version: v2.8.0
 ## Date: 2021-06-20
-## Mod: Build 20211217-001-test
+## Mod: Build 20211221-001-test
 ## Update Content: 可持续发展纲要\n1. session管理破坏性修改\n2. 配置管理可编辑config下文件\n3. 自定义脚本改为查看脚本\n4. 移除互助相关
 
 ## 上面版本号中，如果第2位数字有变化，那么代表增加了新的参数，如果只有第3位数字有变化，仅代表更新了注释，没有增加新的参数，可更新可不更新
@@ -282,6 +282,25 @@ activity_env=(
 ###              ql|JD_DailyBonus                                      两个脚本均不屏蔽仓库文件夹复制替换
 ###              sendNotify@JDHelloWorld_jd_scripts|ccwav_QLScript2    sendNotify.js 不复制到 /ql/scripts/路径下的 JDHelloWorld 和 ccwav 的仓库文件夹。文件夹名称必须精确完整写出，不支持模糊匹配。
 js_deps_replace_envs="ql|JD_DailyBonus&sendNotify@JDHelloWorld_jd_scripts"
+
+## 13 Shell 版 Cookie 检测环境变量
+## 13.1 检测到失效账号后是否搜索并运行 WSKEY 转换 Cookie 的脚本
+### 赋值要求：填 1 表示启用 WSKEY 转换 Cookie 功能。空值或其他值表示不启用该功能。
+WSKEY_TO_CK=""
+## 13.2 账号有效性状态的通知类型
+### 赋值要求：填 1 表示通知有效账号和失效账号。空值或其他值表示只通知失效账号。
+NOTIFY_VALID_CK=""
+## 13.3 JD_WSCK(wskey) 未录入情况的检测和通知类型
+### 赋值要求：填 1 表示检测和通知 JD_WSCK(wskey) 未录入情况。空值或其他值表示不启用该功能。
+###          填 2 表示只检测不通知 JD_WSCK(wskey) 未录入情况。空值或其他值表示不启用该功能。
+NOTIFY_WSKEY_NO_EXIST="2"
+## 13.4 预测和通知账号剩余有效期的检测和通知类型
+### 赋值要求：填 1 表示预测和通知账号剩余有效期。空值或其他值表示不启用该功能。
+###          填 2 表示只预测不通知账号剩余有效期。空值或其他值表示不启用该功能。
+NOTIFY_VALID_TIME="2"
+## 13.5 如果失效账号未变化，则不通知
+### 赋值要求：填 1 表示如果失效账号未变化，则不通知。空值或其他值表示不启用该功能。
+NOTIFY_SKIP_SAME_CONTENT="1"
 
 ## 其他需要的变量，脚本中需要的变量使用 export 变量名= 声明即可
 
