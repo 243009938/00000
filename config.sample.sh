@@ -1,6 +1,6 @@
 ## Version: v2.8.0
 ## Date: 2021-06-20
-## Mod: Build 20211221-001-test
+## Mod: Build 20211230-001-test
 ## Update Content: 可持续发展纲要\n1. session管理破坏性修改\n2. 配置管理可编辑config下文件\n3. 自定义脚本改为查看脚本\n4. 移除互助相关
 
 ## 上面版本号中，如果第2位数字有变化，那么代表增加了新的参数，如果只有第3位数字有变化，仅代表更新了注释，没有增加新的参数，可更新可不更新
@@ -283,24 +283,39 @@ activity_env=(
 ###              sendNotify@JDHelloWorld_jd_scripts|ccwav_QLScript2    sendNotify.js 不复制到 /ql/scripts/路径下的 JDHelloWorld 和 ccwav 的仓库文件夹。文件夹名称必须精确完整写出，不支持模糊匹配。
 js_deps_replace_envs="ql|JD_DailyBonus&sendNotify@JDHelloWorld_jd_scripts"
 
-## 13 Shell 版 Cookie 检测环境变量
-## 13.1 检测到失效账号后是否搜索并运行 WSKEY 转换 Cookie 的脚本
+## 13 Shell 版 Cookie 检测工具 ckck2 环境变量
+## 13.1 检测到失效账号后是否搜索并运行 WSKEY 转换 Cookie 的脚本(需要 /ql/scripts 或其子路径已存在 wskey 转换脚本)
 ### 赋值要求：填 1 表示启用 WSKEY 转换 Cookie 功能。空值或其他值表示不启用该功能。
 WSKEY_TO_CK=""
 ## 13.2 账号有效性状态的通知类型
-### 赋值要求：填 1 表示通知有效账号和失效账号。空值或其他值表示只通知失效账号。
+### 赋值要求：填 1 表示通知有效账号和失效账号。空值或填其他内容表示只通知失效账号。
 NOTIFY_VALID_CK=""
 ## 13.3 JD_WSCK(wskey) 未录入情况的检测和通知类型
-### 赋值要求：填 1 表示检测和通知 JD_WSCK(wskey) 未录入情况。空值或其他值表示不启用该功能。
-###          填 2 表示只检测不通知 JD_WSCK(wskey) 未录入情况。空值或其他值表示不启用该功能。
-NOTIFY_WSKEY_NO_EXIST="2"
+### 赋值要求：填 1 表示检测和通知 JD_WSCK(wskey) 未录入情况；
+###          填 2 表示只检测不通知 JD_WSCK(wskey) 未录入情况；
+###          空值或填其他内容表示不启用该功能。
+NOTIFY_WSKEY_NO_EXIST=""
 ## 13.4 预测和通知账号剩余有效期的检测和通知类型
-### 赋值要求：填 1 表示预测和通知账号剩余有效期。空值或其他值表示不启用该功能。
-###          填 2 表示只预测不通知账号剩余有效期。空值或其他值表示不启用该功能。
-NOTIFY_VALID_TIME="2"
+### 赋值要求：填 1 表示预测和通知账号剩余有效期；
+###          填 2 表示只预测不通知账号剩余有效期；
+###          空值或填其他内容表示不启用该功能。
+NOTIFY_VALID_TIME=""
 ## 13.5 如果失效账号未变化，则不通知
-### 赋值要求：填 1 表示如果失效账号未变化，则不通知。空值或其他值表示不启用该功能。
-NOTIFY_SKIP_SAME_CONTENT="1"
+### 赋值要求：填 1 表示如果失效账号未变化，则不通知。空值或填其他内容表示不启用该功能。
+NOTIFY_SKIP_SAME_CONTENT=""
+## 13.6 WxPusher相关
+### CK_WxPusherUid.json 的生成和更新。
+### nolanjdc 所需的一对一通知备注自动补全注。(备注 和 CK_WxPusherUid.json 的UID 双向同步。备注中丢失的时间戳修复。)
+### 赋值要求：填 1 表示启用功能，并自动生成、更新 CK_WxPusherUid.json 文件；
+###          填 2 表示启用功能，并自动生成、更新 CK_WxPusherUid_Sample.json 文件；
+###          空值或填其他内容表示不启用该功能。
+CK_WxPusherUid=""
+## 13.7 WxPusher App Token，用于一对一推送账号失效通知。
+### 格式为 AT_xxxx；查看地址：https://wxpusher.zjiecode.com/admin/main/app/appToken
+WP_APP_TOKEN_ONE=""
+## 13.8 WxPusher 主 UID，主 UID 账号可以接收失效的第三者账号及其是否录入JD_WSCK(wskey)的信息。
+### 格式为 UID_xxxx；查看地址：https://wxpusher.zjiecode.com/admin/main/wxuser/list
+MainWP_UID=""
 
 ## 其他需要的变量，脚本中需要的变量使用 export 变量名= 声明即可
 
@@ -639,6 +654,9 @@ export NOTIFY_CUSTOMNOTIFY=""
 export PUSH_PLUS_TOKEN_hxtrip=""
 export PUSH_PLUS_USER_hxtrip=""
 ### 12. 用 WxPusher 进行一对一推送
+### 新方案：
+### 填写变量 WP_APP_TOKEN_ONE,按照备注内容@@WxPusherUid的格式修改备注,例子 萌新cc@@UID_AASDADASDQWEQWDADASDADASDASDSA
+### 旧方案：
 ### 详细教程有人写了，不知道是幸运还是不幸: https://www.kejiwanjia.com/jiaocheng/27909.html
 ### 填写变量 WP_APP_TOKEN_ONE,可在管理台查看: https://wxpusher.zjiecode.com/admin/main/app/appToken
 ### 手动建立CK_WxPusherUid.json,可以参考CKName_cache.json,只是nickName改成Uid，
@@ -716,3 +734,9 @@ export JD_CITY_HELPPOOL="true"
 ### 变量名： JD_BEAN_SIGN_BODY
 ### 格式： 演示为两个账号，多账号以此类推
 ### export JD_BEAN_SIGN_BODY="{\"pin\":\"ck1的pt_pin\",\"body\":\"reqData=xxxx一大串字符\"}&{\"pin\":\"ck2的pt_pin\",\"body\":\"reqData=xxx一大串字符\"}"
+
+# shufflewzc
+## 1、禁用重复脚本
+### 变量内容为任务关键词，各关键词用 & 分隔”。
+### 例：export RES_SUB="Aaron-lv_sync&smiek2121_scripts& /ql/scripts/jd_zjd.py"有三个变量
+export RES_SUB="ccwav_QLScript2&shufflewzc_faker2&Aaron-lv_sync&smiek2121_scripts"
