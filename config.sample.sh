@@ -1,6 +1,6 @@
 ## Version: v2.8.0
 ## Date: 2021-06-20
-## Mod: Build 20220110-001-test
+## Mod: Build 20220116-001-test
 ## Update Content: 可持续发展纲要\n1. session管理破坏性修改\n2. 配置管理可编辑config下文件\n3. 自定义脚本改为查看脚本\n4. 移除互助相关
 
 ## 上面版本号中，如果第2位数字有变化，那么代表增加了新的参数，如果只有第3位数字有变化，仅代表更新了注释，没有增加新的参数，可更新可不更新
@@ -277,48 +277,64 @@ activity_env=(
   teamer_num@team_num@activityId9@activityUrl9                                 # 第 10 组环境变量。前两个参数表示 teamer_num 人成队，每个账号最多发起 team_num 次组队
 )
 
-## 12 基础 js 依赖文件的预先替换
-### 释义：目前仅支持将 /ql/config 路径下的 ql.js、sendNotify.js、JD_DailyBonus.js 三个文件，在 task 命令启动时会自动替换到当前运行的脚本所在的文件夹。
+## 12 自定义小工具 extra2.sh 环境变量
+## 12.1 定义是否自动安装或修复缺失或损坏的 node 依赖
+### 赋值要求：填 1 表示启用该功能；空值或填其他内容表示不启用该功能。
+FixDependType=""
+## 12.2 定义是否自动安装或修复缺失或损坏的 node 依赖名称
+package_name="canvas png-js date-fns axios crypto-js ts-md5 tslib @types/node dotenv got md5 requests typescript fs require jsdom download js-base64 tough-cookie tunnel ws jieba prettytable form-data json5 global-agent"
+## 12.3 基础 js 依赖文件的预先下载
+### 释义：目前仅支持将 ql.js、sendNotify.js、JD_DailyBonus.js、JS_USER_AGENTS.js、USER_AGENTS.js 5 个文件下载至 /ql/config 路径
+### 赋值要求：填 1 表示启用该功能；空值或填其他内容表示不启用该功能。
+DOWNLOAD_BASIC_JS=""
+## 12.4 基础 js 依赖文件的预先替换
+### 释义：目前仅支持将 /ql/config 路径下的  ql.js、sendNotify.js、JD_DailyBonus.js、JS_USER_AGENTS.js、USER_AGENTS.js 5 个文件，在 task 命令启动时会自动替换到当前运行的脚本所在的文件夹。
 ### 赋值要求：例如：ql|JD_DailyBonus&sendNotify@JDHelloWorld_jd_scripts|ccwav_QLScript2。各个定义单元之间采用 & 连接。
-###              ql|JD_DailyBonus                                      两个脚本均不屏蔽仓库文件夹复制替换
-###              sendNotify@JDHelloWorld_jd_scripts|ccwav_QLScript2    sendNotify.js 不复制到 /ql/scripts/路径下的 JDHelloWorld 和 ccwav 的仓库文件夹。文件夹名称必须精确完整写出，不支持模糊匹配。
-js_deps_replace_envs="ql|JD_DailyBonus&sendNotify@JDHelloWorld_jd_scripts"
+###                ql|JD_DailyBonus                                      两个脚本均不屏蔽仓库文件夹复制替换
+###                sendNotify@JDHelloWorld_jd_scripts|ccwav_QLScript2    sendNotify.js 不复制到 /ql/scripts/路径下的 JDHelloWorld 和 ccwav 的仓库文件夹。文件夹名称必须精确完整写出，不支持模糊匹配。
+js_deps_replace_envs="ql|JD_DailyBonus&sendNotify|JS_USER_AGENTS|USER_AGENTS@JDHelloWorld_jd_scripts"
 
 ## 13 Shell 版 Cookie 检测工具 ckck2 环境变量
 ## 13.1 检测到失效账号后是否搜索并运行 WSKEY 转换 Cookie 的脚本(需要 /ql/scripts 或其子路径已存在 wskey 转换脚本)
 ### 赋值要求：填 1 表示启用 WSKEY 转换 Cookie 功能。空值或其他值表示不启用该功能。
 WSKEY_TO_CK=""
-## 13.2 JD_WSCK(wskey) 未录入情况的检测和通知类型
+## 13.2 当未搜索到 wskey 脚本时下载 wskey 转换脚本
+### 赋值要求：填 1 表示启用下载 wskey 转换脚本功能。空值或其他值表示不启用该功能。
+DOWNLOAD_WSKEY_SCR=""
+## 13.2 下载 wskey 转换脚本的 URL 链接
+### 赋值要求：空值，则默认下载 ZL143L 的脚本。非必要留空即可。也可自定义其他链接。
+WSKEY_SCR_URL=""
+## 13.3 JD_WSCK(wskey) 未录入情况的检测和通知类型
 ### 赋值要求：填 1 表示检测和通知 JD_WSCK(wskey) 未录入情况；
 ###          填 2 表示只检测不通知 JD_WSCK(wskey) 未录入情况；
 ###          空值或填其他内容表示不启用该功能。
 NOTIFY_WSKEY_NO_EXIST=""
-## 13.3 将 JD_COOKIE 的 pt_pin 值的备注名同步 至 JD_WSCK(wskey) 的同 pin 值的备注名
+## 13.4 将 JD_COOKIE 的 pt_pin 值的备注名同步 至 JD_WSCK(wskey) 的同 pin 值的备注名
 ### 赋值要求：填 1 表示同步；
 ###          空值或填其他内容表示不启用该功能。
 WSKEY_REMARK_SYNC=""
-## 13.4 预测和通知账号剩余有效期的检测和通知类型
+## 13.5 预测和通知账号剩余有效期的检测和通知类型
 ### 赋值要求：填 1 表示预测和通知账号剩余有效期；
 ###          填 2 表示只预测不通知账号剩余有效期；
 ###          空值或填其他内容表示不启用该功能。
 NOTIFY_VALID_TIME=""
-## 13.5 如果失效账号未变化，则不通知
+## 13.6 如果失效账号未变化，则不通知
 ### 赋值要求：填 1 表示如果失效账号未变化，则不通知。空值或填其他内容表示不启用该功能。
 NOTIFY_SKIP_SAME_CONTENT=""
-## 13.6 WxPusher相关
+## 13.7 WxPusher相关
 ### CK_WxPusherUid.json 的生成和更新。
 ### nolanjdc 所需的一对一通知备注自动补全注。(备注 和 CK_WxPusherUid.json 的UID 双向同步。备注中丢失的时间戳修复。)
 ### 赋值要求：填 1 表示启用功能，并自动生成、更新 CK_WxPusherUid.json 文件；
 ###          填 2 表示启用功能，并自动生成、更新 CK_WxPusherUid_Sample.json 文件；
 ###          空值或填其他内容表示不启用该功能。
 CK_WxPusherUid=""
-## 13.7 WxPusher App Token，用于一对一推送账号失效通知。
+## 13.8 WxPusher App Token，用于一对一推送账号失效通知。
 ### 格式为 AT_xxxx；查看地址：https://wxpusher.zjiecode.com/admin/main/app/appToken
 WP_APP_TOKEN_ONE=""
-## 13.8 WxPusher 主 UID，主 UID 账号可以接收失效的第三者账号及其是否录入JD_WSCK(wskey)的信息。
+## 13.9 WxPusher 主 UID，主 UID 账号可以接收失效的第三者账号及其是否录入JD_WSCK(wskey)的信息。
 ### 格式为 UID_xxxx；查看地址：https://wxpusher.zjiecode.com/admin/main/wxuser/list
 MainWP_UID=""
-## 13.9 扩展通知
+## 13.10 扩展通知
 ### 通知内容出现在正文末尾。支持 HTML 语言代码
 ### 例如：ExNotify_Content="NoLan服务器：<a href="http://服务器地址:端口?key=HeaderKey">点击访问</a>"
 ExNotify_Content=""
